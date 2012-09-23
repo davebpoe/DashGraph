@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="../plot.js"></script>
+<script src="http://dygraphs.com/dygraph-combined.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script>
+  $(function () {
+    var xs, ys, vals, i;
+    var gain = .0001;
+    xs = [];
+    ys = [];
+    vals = [];
+    for (i = 0; i < 200000; i++) {
+        xs.push(i);
+        ys.push(Math.cos(i*gain));
+        vals.push([i, Math.cos(i*gain)]);
+    }
+    
+    // My Test
+    var start = (new Date).getTime();
+    var data = new DashGraph.Data(xs, ys);    
+    var myPlot = new DashGraph.Plot(document.getElementById("plot"));
+    myPlot.addData(data);
+    myPlot.update();
+    var diff = (new Date).getTime() - start;
+    $("#plot_debug").text("Took " + diff/1000 + " seconds to render");
+    
+    // Dygraph test
+    start = (new Date).getTime();
+    var dyGraph = new Dygraph(document.getElementById("plot2"), vals);
+    diff = (new Date).getTime() - start;
+    $("#plot2_debug").text("Took " + diff/1000 + " seconds to render");
+  });
+</script>
+
+</head>
+
+<body>
+  <div id="plot_debug"></div>
+  <div id="plot" style="height:300px; width:400px"></div>
+  <div id="plot2_debug"></div>
+  <div id="plot2" style="height:300px; width:400px"></div>
+</body>
+</html>

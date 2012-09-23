@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="../plot.js"></script>
+<!--> <script type="text/javascript" src="dygraph-combined.js"></script> </!-->
+<script src="../dygraph-combined.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script src="../jquery.flot.js"></script>
+<script src="../jquery.jqplot.min.js"></script>
+<script src="../jscharts.js"></script>
+<script src="../EJSChart.js"></script>
+
+<script>
+  $(function () {
+    var xs, ys, vals, i;
+    var gain = .0001;
+    var dyVals, flotVals, flotVals2;
+    var val, val2;
+    xs = [];
+    ys = [];
+    dyVals = [];
+    flotVals = [];
+    flotVals2 = [];
+    for (i = 0; i < 200000; i++) {
+        val = Math.cos(i*gain);
+        val2 = Math.sin(i*gain)*2.341;
+        xs.push(i);
+        ys.push([val, val2]);
+        dyVals.push([i, val, val2]);
+        flotVals.push([i, val]);
+        flotVals2.push([i, val2]);
+    }
+    
+    // My Test
+    //var data = {x : xs, y: ys};
+    var start = (new Date).getTime();
+    var data = new DashGraph.Data({x: xs, y: ys});    
+    var myPlot = new DashGraph.Plot(document.getElementById("plot"), data);
+    myPlot.addData(data);
+    myPlot.update();
+    var diff = (new Date).getTime() - start;
+    $("#plot_debug").text("Took " + diff/1000 + " seconds to render");
+    
+    // Dygraph test
+    start = (new Date).getTime();
+    var dyGraph = new Dygraph(document.getElementById("dygraph"), dyVals);
+    diff = (new Date).getTime() - start;
+    $("#dygraph_debug").text("Dygraph took " + diff/1000 + " seconds to render");
+    
+    // Flot test
+    start = (new Date).getTime();
+    $.plot($("#flot"), [flotVals, flotVals2]);
+    diff = (new Date).getTime() - start;
+    $("#flot_debug").text("Flot took " + diff/1000 + " seconds to render");
+  
+    // JQPlot test
+    start = (new Date).getTime();
+    $.jqplot("jqplot", [flotVals, flotVals2],
+    {
+        series:[
+        {
+            showMarker: false
+        },
+        {
+            showMarker: false
+        }]
+    });
+    diff = (new Date).getTime() - start;
+    $("#jqplot_debug").text("JQPlot took " + diff/1000 + " seconds to render");
+    
+    // JSCharts test
+    start = (new Date).getTime();
+    var myChart = new JSChart('jsplot', 'line');
+    myChart.setDataArray(flotVals);
+    myChart.setDataArray(flotVals2);
+    myChart.setLineSpeed(100);
+    myChart.draw();
+    diff = (new Date).getTime() - start;
+    $("#jsplot_debug").text("JSCharts took " + diff/1000 + " seconds to render");
+    
+    // EJSCharts test
+    start = (new Date).getTime();
+    var chart = new EJSC.Chart('ejsplot');
+    chart.addSeries(new EJSC.LineSeries(
+        new EJSC.ArrayDataHandler(flotVals)
+    ));
+    chart.addSeries(new EJSC.LineSeries(
+        new EJSC.ArrayDataHandler(flotVals2)
+    ));
+    diff = (new Date).getTime() - start;
+    $("#ejsplot_debug").text("EJSCharts took " + diff/1000 + " seconds to render (note: starts a new thread, not a good indicator of speed)");
+    
+  });
+</script>
+
+</head>
+
+<body>
+  <div id="plot_debug"></div>
+  <div id="plot" style="height:300px; width:400px"></div>
+  <div id="dygraph_debug"></div>
+  <div id="dygraph" style="height:300px; width:400px"></div>
+  <div id="flot_debug"></div>
+  <div id="flot" style="height:300px; width:400px"></div>
+  <div id="jqplot_debug"></div>
+  <div id="jqplot" style="height:300px; width:400px"></div>
+  <div id="jsplot_debug"></div>
+  <div id="jsplot" style="height:300px; width:400px"></div>
+  <div id="ejsplot_debug"></div>
+  <div id="ejsplot" style="height:300px; width:400px"></div>
+</body>
+</html>

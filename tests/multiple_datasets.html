@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="../plot.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script>
+  $(function () {
+    var xs, ys, x2s, y2s, x3s, y3s, i;
+    var gain = .0001;
+    xs = [];
+    ys = [];
+    x2s = [];
+    y2s = [];
+    x3s = [];
+    y3s = [];
+    for (i = 0; i < 200000; i++) {
+        xs.push(i);
+        ys.push([Math.cos(i*gain), Math.sin(i*gain)]);
+    }
+    
+    for (i = 0; i < 20000; i++) {
+        x2s.push(i*10);
+        y2s.push([Math.cos(i*gain*20)*Math.cos(i*gain*30) -.5, .1*Math.sin(i*gain*10) + 1]);
+    }
+    
+    for (i = 0; i < 100000; i++) {
+        x3s.push(i);
+        y3s.push([Math.cos(i*gain*50)*Math.sin(i*gain*2)+3, .2*Math.sin(i*gain*4) - 6]);
+    }
+    
+    // My Test
+    var start = (new Date).getTime();
+    var data = new DashGraph.Data(xs, ys);  
+    var data2 = new DashGraph.Data(x2s,y2s);
+    var data3 = new DashGraph.Data(x3s, y3s);
+    var myPlot = new DashGraph.Plot(document.getElementById("plot"));
+    myPlot.addData(data);
+    myPlot.addData(data2);
+    myPlot.addData(data3);
+    myPlot.update();
+    var diff = (new Date).getTime() - start;
+    $("#plot_debug").text("Took " + diff/1000 + " seconds to render");    
+
+  });
+</script>
+
+</head>
+
+<body>
+  <div id="plot_debug"></div>
+  <div id="plot" style="height:300px; width:400px"></div>
+</body>
+</html>

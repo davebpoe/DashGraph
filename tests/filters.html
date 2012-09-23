@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="../plot.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script>
+  $(function () {
+    var xs, ys, vals, i;
+    var gain = .0001;
+    xs = [];
+    ys = [];
+    vals = [];
+    for (i = 0; i < 200000; i++) {
+        xs.push(i);
+        ys.push(Math.cos(i*gain));
+        vals.push([i, Math.cos(i*gain)]);
+    }
+    
+    // Filter Test
+    var start = (new Date).getTime();
+    opts = { filter: {index: [0, 10000, 100000, 150000], colors: ["#00FF00", "#FF0000", "#0000FF", "#FF00FF"]}};
+    var data = new DashGraph.Data(xs, ys, opts);
+    var myPlot = new DashGraph.Plot(document.getElementById("plot"));
+    myPlot.addData(data);
+    myPlot.update();
+    var diff = (new Date).getTime() - start;
+    $("#plot_debug").text("Took " + diff/1000 + " seconds to render");    
+
+  });
+</script>
+
+</head>
+
+<body>
+  <div id="plot_debug"></div>
+  <div id="plot" style="height:300px; width:400px"></div>
+</body>
+</html>
