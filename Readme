@@ -1,0 +1,9 @@
+Dash Graph
+
+Inspired by Dygraphs to be a rapid Javascript plotting library, DasphGraph is
+designed to make plotting of various types very fast.  In particular it supports
+multiple datasets with various x-axes, as well as filters which are designed
+to change the color of the plot at specific locations.
+
+There are currently many important missing features, and bugs with the plot such
+that it is not useful for deployment at this time. 
